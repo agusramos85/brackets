@@ -51,11 +51,8 @@ define(function (require, exports, module) {
 
             // open file
             runs(function () {
-                FileViewController.openAndSelectDocument(path, FileViewController.PROJECT_MANAGER)
-                    .done(function () { didOpen = true; })
-                    .fail(function () { gotError = true; });
-            });
-            waitsFor(function () { return didOpen && !gotError; }, "FILE_OPEN on file timeout", 1000);
+                waitsForDone(FileViewController.openAndSelectDocument(path, FileViewController.PROJECT_MANAGER), "FILE_OPEN on file timeout", 1000);
+            })
 
             // change editor content to make doc dirty which adds it to the working set
             runs(function () {
@@ -136,12 +133,10 @@ define(function (require, exports, module) {
 
             // close the document
             var didClose = false, gotError = false;
+            
             runs(function () {
-                CommandManager.execute(Commands.FILE_CLOSE)
-                    .done(function () { didClose = true; })
-                    .fail(function () { gotError = true; });
+               waitsForDone(CommandManager.execute(Commands.FILE_CLOSE)); 
             });
-            waitsFor(function () { return didClose && !gotError; }, "FILE_OPEN on file timeout", 1000);
 
             // check there are no list items
             runs(function () {
